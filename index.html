@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Synaptic Wars - Phase 1 Demo</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loading-content">
+            <div class="neuro-spinner"></div>
+            <h2>Initializing Neural Pathways...</h2>
+            <p>Synaptic Wars V 1.0 - Basic Neuro-Gaming Demo</p>
+        </div>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="ui">
+            <h1>🧠 Synaptic Wars - MVP </h1>
+            <div class="neuro-bar">
+                <span>BDNF Level: <span id="bdnf-value">0.23</span></span>
+                <div class="bar"><div id="bdnf-bar"></div></div>
+            </div>
+            <div class="neuro-bar">
+                <span>Synaptic Strength: <span id="strength-value">1.0</span></span>
+                <div class="bar"><div id="strength-bar"></div></div>
+            </div>
+            <button id="dendritic-btn" onclick="activateDendriticLightning()">⚡ Dendritic Lightning (Click)</button>
+            <button id="eeg-btn" onclick="simulateEEG()">🔗 Simulate EEG Connection</button>
+            <div id="eeg-status">EEG: Not Connected</div>
+            <div class="game-stats">
+                <div>Score: <span id="score">0</span></div>
+                <div>Time: <span id="game-time">0</span>s</div>
+                <div>Tanglers: <span id="tanglers-remaining">0</span></div>
+            </div>
+        </div>
+
+        <div id="game-canvas"></div>
+
+        <div id="instructions">
+            <h3>🎮 How to Play</h3>
+            <p>• Click <strong>Dendritic Lightning</strong> to zap Tau Tanglers</p>
+            <p>• Connect <strong>EEG</strong> for neuro-feedback (simulated)</p>
+            <p>• Watch your <strong>neuroplasticity</strong> increase!</p>
+            <button id="start-btn" onclick="startGame()">Begin Neural Journey</button>
+        </div>
+    </div>
+
+    <script src="./js/neuro-engine.js"></script>
+    <script src="./js/game-loop.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
