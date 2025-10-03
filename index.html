@@ -1,332 +1,515 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Synaptic Wars - Phase 1 Demo</title>
-    <link rel="stylesheet" href="./css/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synaptic Wars - Neuro-Gaming Revolution</title>
     <style>
-        /* Additional styles for the neuro-gaming demo */
+        /* Your existing styles + new demo styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Demo Section Styles */
+        .demo-section {
+            padding: 60px 0;
+            background: rgba(138, 43, 226, 0.1);
+            margin: 40px 0;
+            border-radius: 20px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .game-canvas {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #8A2BE2;
+            border-radius: 15px;
+            background: #1a1a2e;
+            position: relative;
+            overflow: hidden;
+        }
+
         .neuro-dashboard {
-            background: rgba(0,0,0,0.8); 
-            padding: 20px; 
-            border-radius: 10px; 
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px;
+            border-radius: 15px;
             border: 1px solid #8A2BE2;
+            backdrop-filter: blur(10px);
         }
-        
+
         .metric {
-            margin-bottom: 15px;
+            margin: 20px 0;
         }
-        
+
         .progress-bar {
             width: 100%;
             height: 20px;
-            background: rgba(255,255,255,0.1);
+            background: #333;
             border-radius: 10px;
             overflow: hidden;
+            margin: 8px 0;
         }
-        
-        .game-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding: 10px;
-            background: rgba(138, 43, 226, 0.2);
-            border-radius: 8px;
-        }
-        
-        #instructions {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0,0,0,0.7);
+
+        .demo-btn {
+            background: linear-gradient(135deg, #8A2BE2, #00BFFF);
+            color: white;
+            border: none;
+            padding: 15px 25px;
             border-radius: 10px;
-            border: 1px solid #00BFFF;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .demo-btn.secondary {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+        }
+
+        .status-indicator {
+            padding: 12px;
+            background: #333;
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .status-connected {
+            background: #1dd1a1;
+            color: #000;
+        }
+
+        .achievement {
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            color: black;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div id="loading-screen">
-        <div class="loading-content">
-            <div class="neuro-spinner"></div>
-            <h2>Initializing Neural Pathways...</h2>
-            <p>Synaptic Wars V 1.0 - Basic Neuro-Gaming Demo</p>
+    <!-- Your existing header and countdown sections remain the same -->
+    <header style="text-align: center; padding: 60px 0;">
+        <h1 style="font-size: 3em; margin-bottom: 20px;">🧠 Synaptic Wars</h1>
+        <p style="font-size: 1.5em; margin-bottom: 30px;">Where Gaming Rewires Your Brain</p>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; display: inline-block;">
+            <h3 style="margin-bottom: 15px;">🚀 Launching 12.12.2025</h3>
+            <div id="countdown" style="font-size: 1.8em; font-weight: bold;"></div>
         </div>
-    </div>
+    </header>
 
-    <div id="game-container" style="display: none;">
-        <!-- Neuro-Gaming Demo Section -->
-        <section id="live-demo" style="padding: 40px 0; background: rgba(138, 43, 226, 0.1); border-radius: 15px; margin: 40px 0;">
-            <div class="container">
-                <h2 style="text-align: center; margin-bottom: 30px;">🎮 Live Neuro-Gaming Demo</h2>
-                
-                <div id="demo-container" style="display: none;">
-                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-                        <div style="flex: 1; min-width: 300px;">
-                            <div id="game-canvas" style="width: 100%; height: 400px; border: 2px solid #8A2BE2; border-radius: 10px; background: #1a1a2e;"></div>
+    <!-- NEW INTERACTIVE DEMO SECTION -->
+    <section class="demo-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.5em;">🎮 Live Neuro-Gaming Demo</h2>
+            
+            <div class="demo-grid">
+                <!-- WebGL Game Canvas -->
+                <div>
+                    <div class="game-canvas" id="game-canvas">
+                        <div id="demo-placeholder" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                            <div style="font-size: 4em; margin-bottom: 20px;">🧠</div>
+                            <h3>Neuro-Gaming Experience</h3>
+                            <p>Ready to explore your neural pathways</p>
+                            <button class="demo-btn" onclick="loadNeuroDemo()" style="margin-top: 20px;">
+                                🚀 Launch Neural Journey
+                            </button>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Neuroplasticity Dashboard -->
+                <div>
+                    <div class="neuro-dashboard">
+                        <h3 style="color: #8A2BE2; margin-bottom: 25px; text-align: center;">🧠 Live Neuroplasticity Metrics</h3>
                         
-                        <div style="flex: 1; min-width: 300px;">
-                            <div class="neuro-dashboard">
-                                <h3 style="color: #8A2BE2; margin-bottom: 20px;">🧠 Neuroplasticity Metrics</h3>
-                                
-                                <div class="metric">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                        <span>BDNF Level:</span>
-                                        <span id="bdnf-value">0.23</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="bdnf-bar" style="width: 23%; height: 20px; background: linear-gradient(90deg, #ff0000, #00ffff); border-radius: 10px;"></div>
-                                    </div>
-                                </div>
-                                
-                                <div class="metric">
-                                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                                        <span>Synaptic Strength:</span>
-                                        <span id="strength-value">1.0</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div id="strength-bar" style="width: 50%; height: 20px; background: linear-gradient(90deg, #00ff00, #ffff00); border-radius: 10px;"></div>
-                                    </div>
-                                </div>
-                                
-                                <div style="margin-top: 20px;">
-                                    <button id="dendritic-btn" style="background: linear-gradient(135deg, #8A2BE2, #00BFFF); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; margin: 5px; width: 100%;">
-                                        ⚡ Activate Dendritic Lightning
-                                    </button>
-                                    <button id="eeg-btn" style="background: linear-gradient(135deg, #ff6b6b, #ffa500); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; margin: 5px; width: 100%;">
-                                        🔗 Simulate EEG Connection
-                                    </button>
-                                </div>
-                                
-                                <div id="eeg-status" style="margin-top: 15px; padding: 10px; background: #333; border-radius: 5px; text-align: center; font-size: 12px;">
-                                    EEG Status: Not Connected
-                                </div>
-                                
-                                <div class="game-stats">
-                                    <div>Score: <span id="score">0</span></div>
-                                    <div>Time: <span id="game-time">0</span>s</div>
-                                    <div>Tanglers: <span id="tanglers-remaining">6</span></div>
-                                </div>
+                        <div class="metric">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>🧪 BDNF Level:</span>
+                                <span id="bdnf-value">0.23</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="bdnf-bar" style="width: 23%; height: 100%; background: linear-gradient(90deg, #ff0000, #00ffff); transition: width 0.5s ease;"></div>
                             </div>
                         </div>
+                        
+                        <div class="metric">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>⚡ Synaptic Strength:</span>
+                                <span id="strength-value">1.0</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div id="strength-bar" style="width: 50%; height: 100%; background: linear-gradient(90deg, #00ff00, #ffff00); transition: width 0.5s ease;"></div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin: 25px 0;">
+                            <button class="demo-btn" id="dendritic-btn">
+                                ⚡ Dendritic Lightning
+                            </button>
+                            <button class="demo-btn secondary" id="eeg-btn">
+                                🔗 Connect EEG
+                            </button>
+                        </div>
+                        
+                        <div class="status-indicator" id="eeg-status">
+                            🧠 EEG Status: Ready to Connect
+                        </div>
+                        
+                        <div id="achievements-container"></div>
                     </div>
-                    
-                    <div style="text-align: center; margin-top: 20px;">
-                        <button id="start-demo-btn" style="background: linear-gradient(135deg, #00BFFF, #8A2BE2); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; font-size: 16px;">
-                            🚀 Launch Neuro-Gaming Experience
-                        </button>
-                    </div>
-                    
-                    <div id="instructions">
-                        <h3>🎮 How to Play</h3>
-                        <p>• Click <strong>Dendritic Lightning</strong> to zap Tau Tanglers</p>
-                        <p>• Connect <strong>EEG</strong> for neuro-feedback (simulated)</p>
-                        <p>• Watch your <strong>neuroplasticity</strong> increase!</p>
-                    </div>
-                </div>
-                
-                <div id="demo-placeholder" style="text-align: center; padding: 60px 20px;">
-                    <div style="font-size: 48px; margin-bottom: 20px;">🧠</div>
-                    <h3>Neuro-Gaming Demo Ready</h3>
-                    <p>Experience the world's first neuroplasticity video game</p>
-                    <button onclick="loadDemo()" style="background: linear-gradient(135deg, #8A2BE2, #00BFFF); color: white; border: none; padding: 15px 30px; border-radius: 8px; cursor: pointer; margin-top: 20px;">
-                        Load Interactive Demo
-                    </button>
                 </div>
             </div>
-        </section>
-    </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="opacity: 0.8; font-size: 0.9em;">
+                    💡 <strong>Tip:</strong> Use Dendritic Lightning to clear Tau Tanglers and watch your neuroplasticity grow!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Your existing features section remains -->
+    <section style="padding: 60px 0;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 40px;">The Future of Therapeutic Gaming</h2>
+            <!-- Your existing features content -->
+        </div>
+    </section>
 
     <script>
-        // Loading screen functionality
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.getElementById('loading-screen').style.display = 'none';
-                document.getElementById('game-container').style.display = 'block';
-            }, 2000);
-        });
-
-        // Neuro-Gaming Demo functionality
-        let demoLoaded = false;
-
-        function loadDemo() {
-            if (demoLoaded) return;
+        // Countdown Timer (your existing code)
+        function updateCountdown() {
+            const targetDate = new Date('2025-12-12').getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
             
-            document.getElementById('demo-placeholder').style.display = 'none';
-            document.getElementById('demo-container').style.display = 'block';
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById('countdown').innerHTML = `${days} days remaining`;
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Neuro-Gaming Demo
+        let neuroDemo = {
+            scene: null,
+            camera: null,
+            renderer: null,
+            neuron: null,
+            tanglers: [],
+            bdnf: 0.23,
+            strength: 1.0,
+            eegConnected: false,
+            achievements: []
+        };
+
+        function loadNeuroDemo() {
+            const placeholder = document.getElementById('demo-placeholder');
+            const canvas = document.getElementById('game-canvas');
             
-            // Wait for Three.js to load
-            const checkThree = setInterval(() => {
-                if (window.THREE) {
-                    clearInterval(checkThree);
-                    initializeDemo();
-                }
-            }, 100);
+            placeholder.style.display = 'none';
+            
+            // Load Three.js dynamically
+            if (!window.THREE) {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+                script.onload = initializeDemo;
+                document.head.appendChild(script);
+            } else {
+                initializeDemo();
+            }
         }
 
         function initializeDemo() {
-            // Basic Three.js scene setup
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            
             const canvas = document.getElementById('game-canvas');
-            renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
-            renderer.setClearColor(0x1a1a2e);
-            canvas.appendChild(renderer.domElement);
             
-            // Create neuron
-            const neuronGeometry = new THREE.SphereGeometry(1, 32, 32);
-            const neuronMaterial = new THREE.MeshBasicMaterial({ 
+            // Setup Three.js scene
+            neuroDemo.scene = new THREE.Scene();
+            neuroDemo.camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+            neuroDemo.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            neuroDemo.renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+            neuroDemo.renderer.setClearColor(0x1a1a2e);
+            canvas.appendChild(neuroDemo.renderer.domElement);
+
+            // Create neural environment
+            createNeuralEnvironment();
+            
+            // Setup interactions
+            setupInteractions();
+            
+            // Start animation
+            animate();
+            
+            // Initial UI update
+            updateNeuroMetrics();
+        }
+
+        function createNeuralEnvironment() {
+            // Create central neuron
+            const geometry = new THREE.SphereGeometry(1, 32, 32);
+            const material = new THREE.MeshBasicMaterial({ 
                 color: 0x8A2BE2,
                 wireframe: true
             });
-            const neuron = new THREE.Mesh(neuronGeometry, neuronMaterial);
-            scene.add(neuron);
-            
-            // Create Tau Tanglers
-            const tanglers = [];
+            neuroDemo.neuron = new THREE.Mesh(geometry, material);
+            neuroDemo.scene.add(neuroDemo.neuron);
+
+            // Create Tau Tanglers (enemies)
             for (let i = 0; i < 6; i++) {
-                const geometry = new THREE.SphereGeometry(0.3, 16, 16);
-                const material = new THREE.MeshBasicMaterial({ color: 0xff4444 });
-                const tangler = new THREE.Mesh(geometry, material);
-                
-                tangler.position.x = (Math.random() - 0.5) * 8;
-                tangler.position.y = (Math.random() - 0.5) * 8;
-                tangler.position.z = (Math.random() - 0.5) * 8;
-                
-                scene.add(tangler);
-                tanglers.push(tangler);
+                createTauTangler();
             }
-            
-            camera.position.z = 5;
-            
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                neuron.rotation.x += 0.01;
-                neuron.rotation.y += 0.01;
-                
-                tanglers.forEach(tangler => {
-                    tangler.rotation.x += 0.02;
-                    tangler.rotation.y += 0.02;
-                });
-                
-                renderer.render(scene, camera);
+
+            // Add some neural connections
+            for (let i = 0; i < 8; i++) {
+                createNeuralConnection();
             }
-            animate();
-            
-            // Demo functionality
-            let bdnf = 0.23;
-            let strength = 1.0;
-            let eegConnected = false;
-            let score = 0;
-            let gameTime = 0;
-            let tanglersRemaining = 6;
-            
-            // Start game timer
-            const gameTimer = setInterval(() => {
-                if (demoLoaded) {
-                    gameTime++;
-                    document.getElementById('game-time').textContent = gameTime;
-                }
-            }, 1000);
-            
-            function updateMetrics() {
-                document.getElementById('bdnf-value').textContent = bdnf.toFixed(2);
-                document.getElementById('strength-value').textContent = strength.toFixed(2);
-                document.getElementById('bdnf-bar').style.width = (bdnf * 100) + '%';
-                document.getElementById('strength-bar').style.width = (strength * 50) + '%';
-                document.getElementById('score').textContent = score;
-                document.getElementById('tanglers-remaining').textContent = tanglersRemaining;
-            }
-            
-            document.getElementById('dendritic-btn').addEventListener('click', function() {
-                // Visual effect
-                const flash = new THREE.PointLight(0x00ffff, 2, 10);
-                flash.position.copy(neuron.position);
-                scene.add(flash);
-                
-                // Remove a tangler
-                if (tanglers.length > 0) {
-                    const removed = tanglers.pop();
-                    scene.remove(removed);
-                    tanglersRemaining = tanglers.length;
-                    score += 10;
-                }
-                
-                // Increase neuroplasticity
-                bdnf = Math.min(bdnf + 0.05, 1.0);
-                strength = Math.min(strength + 0.1, 2.0);
-                updateMetrics();
-                
-                setTimeout(() => scene.remove(flash), 200);
+
+            neuroDemo.camera.position.z = 5;
+        }
+
+        function createTauTangler() {
+            const geometry = new THREE.SphereGeometry(0.2 + Math.random() * 0.1, 12, 12);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: new THREE.Color().setHSL(0, 0.8, 0.6) // Red hue
             });
             
-            document.getElementById('eeg-btn').addEventListener('click', function() {
-                eegConnected = !eegConnected;
-                const status = document.getElementById('eeg-status');
-                const button = document.getElementById('eeg-btn');
-                
-                if (eegConnected) {
-                    status.textContent = "EEG: Connected (Simulated) - Focus Detected!";
-                    status.style.background = "#1dd1a1";
-                    button.textContent = "🔗 Disconnect EEG";
-                    
-                    // Simulate EEG rewards
-                    const eegInterval = setInterval(() => {
-                        if (eegConnected) {
-                            bdnf = Math.min(bdnf + 0.01, 1.0);
-                            updateMetrics();
-                        } else {
-                            clearInterval(eegInterval);
-                        }
-                    }, 2000);
-                } else {
-                    status.textContent = "EEG: Not Connected";
-                    status.style.background = "#333";
-                    button.textContent = "🔗 Simulate EEG Connection";
-                }
+            const tangler = new THREE.Mesh(geometry, material);
+            
+            // Random position around neuron
+            const radius = 2 + Math.random() * 3;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            
+            tangler.position.x = radius * Math.sin(phi) * Math.cos(theta);
+            tangler.position.y = radius * Math.sin(phi) * Math.sin(theta);
+            tangler.position.z = radius * Math.cos(phi);
+            
+            // Store movement data
+            tangler.userData = {
+                speed: 0.005 + Math.random() * 0.01,
+                phase: Math.random() * Math.PI * 2
+            };
+            
+            neuroDemo.scene.add(tangler);
+            neuroDemo.tanglers.push(tangler);
+        }
+
+        function createNeuralConnection() {
+            const points = [];
+            for (let i = 0; i < 5; i++) {
+                points.push(new THREE.Vector3(
+                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 6
+                ));
+            }
+            
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ 
+                color: 0x00BFFF,
+                transparent: true,
+                opacity: 0.3
             });
             
-            document.getElementById('start-demo-btn').addEventListener('click', function() {
-                // Reset game state
-                bdnf = 0.23;
-                strength = 1.0;
-                score = 0;
-                gameTime = 0;
+            const connection = new THREE.Line(geometry, material);
+            neuroDemo.scene.add(connection);
+        }
+
+        function setupInteractions() {
+            document.getElementById('dendritic-btn').addEventListener('click', activateDendriticLightning);
+            document.getElementById('eeg-btn').addEventListener('click', toggleEEGConnection);
+        }
+
+        function activateDendriticLightning() {
+            // Visual effects
+            const flash = new THREE.PointLight(0x00ffff, 2, 8);
+            flash.position.copy(neuroDemo.neuron.position);
+            neuroDemo.scene.add(flash);
+
+            // Create lightning effect
+            if (neuroDemo.tanglers.length > 0) {
+                const target = neuroDemo.tanglers[0];
+                createLightningBolt(neuroDemo.neuron.position, target.position);
                 
-                // Reset tanglers
-                tanglers.forEach(tangler => scene.remove(tangler));
-                tanglers.length = 0;
+                // Remove the tangler
+                neuroDemo.scene.remove(target);
+                neuroDemo.tanglers.shift();
                 
-                for (let i = 0; i < 6; i++) {
-                    const geometry = new THREE.SphereGeometry(0.3, 16, 16);
-                    const material = new THREE.MeshBasicMaterial({ color: 0xff4444 });
-                    const tangler = new THREE.Mesh(geometry, material);
-                    
-                    tangler.position.x = (Math.random() - 0.5) * 8;
-                    tangler.position.y = (Math.random() - 0.5) * 8;
-                    tangler.position.z = (Math.random() - 0.5) * 8;
-                    
-                    scene.add(tangler);
-                    tanglers.push(tangler);
-                }
-                
-                tanglersRemaining = 6;
-                updateMetrics();
+                // Create new tangler after delay
+                setTimeout(createTauTangler, 1000);
+            }
+
+            // Increase neuroplasticity
+            neuroDemo.bdnf = Math.min(neuroDemo.bdnf + 0.05, 1.0);
+            neuroDemo.strength = Math.min(neuroDemo.strength + 0.08, 2.0);
+            
+            updateNeuroMetrics();
+            checkAchievements();
+
+            // Cleanup flash
+            setTimeout(() => neuroDemo.scene.remove(flash), 200);
+        }
+
+        function createLightningBolt(start, end) {
+            const points = [start];
+            const segments = 8;
+            
+            for (let i = 1; i < segments; i++) {
+                const point = new THREE.Vector3().lerpVectors(start, end, i/segments);
+                point.x += (Math.random() - 0.5) * 0.5;
+                point.y += (Math.random() - 0.5) * 0.5;
+                point.z += (Math.random() - 0.5) * 0.5;
+                points.push(point);
+            }
+            points.push(end);
+            
+            const geometry = new THREE.BufferGeometry().setFromPoints(points);
+            const material = new THREE.LineBasicMaterial({ 
+                color: 0x00ffff,
+                linewidth: 2
             });
             
-            updateMetrics();
-            demoLoaded = true;
+            const lightning = new THREE.Line(geometry, material);
+            neuroDemo.scene.add(lightning);
+            
+            setTimeout(() => neuroDemo.scene.remove(lightning), 100);
+        }
+
+        function toggleEEGConnection() {
+            neuroDemo.eegConnected = !neuroDemo.eegConnected;
+            const status = document.getElementById('eeg-status');
+            const button = document.getElementById('eeg-btn');
+            
+            if (neuroDemo.eegConnected) {
+                status.textContent = "🧠 EEG: Connected - High Focus Detected!";
+                status.className = "status-indicator status-connected";
+                button.textContent = "🔗 Disconnect EEG";
+                
+                // Simulate EEG focus rewards
+                neuroDemo.eegInterval = setInterval(() => {
+                    if (neuroDemo.eegConnected) {
+                        neuroDemo.bdnf = Math.min(neuroDemo.bdnf + 0.01, 1.0);
+                        updateNeuroMetrics();
+                        checkAchievements();
+                    }
+                }, 1500);
+            } else {
+                status.textContent = "🧠 EEG: Ready to Connect";
+                status.className = "status-indicator";
+                button.textContent = "🔗 Connect EEG";
+                clearInterval(neuroDemo.eegInterval);
+            }
+        }
+
+        function updateNeuroMetrics() {
+            document.getElementById('bdnf-value').textContent = neuroDemo.bdnf.toFixed(2);
+            document.getElementById('strength-value').textContent = neuroDemo.strength.toFixed(2);
+            document.getElementById('bdnf-bar').style.width = (neuroDemo.bdnf * 100) + '%';
+            document.getElementById('strength-bar').style.width = (neuroDemo.strength * 50) + '%';
+        }
+
+        function checkAchievements() {
+            const container = document.getElementById('achievements-container');
+            
+            if (neuroDemo.bdnf >= 0.5 && !neuroDemo.achievements.includes('bdnf_master')) {
+                neuroDemo.achievements.push('bdnf_master');
+                showAchievement('🏆 BDNF Master', 'Your brain is producing optimal growth factors!');
+            }
+            
+            if (neuroDemo.strength >= 1.5 && !neuroDemo.achievements.includes('synaptic_champion')) {
+                neuroDemo.achievements.push('synaptic_champion');
+                showAchievement('⭐ Synaptic Champion', 'Neural connections are strengthening rapidly!');
+            }
+        }
+
+        function showAchievement(title, description) {
+            const container = document.getElementById('achievements-container');
+            const achievement = document.createElement('div');
+            achievement.className = 'achievement';
+            achievement.innerHTML = `<strong>${title}</strong><br>${description}`;
+            
+            container.appendChild(achievement);
+            
+            setTimeout(() => {
+                achievement.style.opacity = '0';
+                setTimeout(() => achievement.remove(), 500);
+            }, 4000);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (neuroDemo.neuron) {
+                neuroDemo.neuron.rotation.x += 0.01;
+                neuroDemo.neuron.rotation.y += 0.015;
+            }
+            
+            // Animate Tau Tanglers
+            neuroDemo.tanglers.forEach(tangler => {
+                tangler.rotation.x += 0.02;
+                tangler.rotation.y += 0.03;
+                
+                // Pulsing effect
+                const scale = 0.8 + Math.sin(Date.now() * 0.003 + tangler.userData.phase) * 0.2;
+                tangler.scale.setScalar(scale);
+            });
+            
+            if (neuroDemo.renderer && neuroDemo.scene && neuroDemo.camera) {
+                neuroDemo.renderer.render(neuroDemo.scene, neuroDemo.camera);
+            }
         }
 
         // Handle window resize
         window.addEventListener('resize', function() {
-            if (demoLoaded) {
-                // Would need to update renderer size here
+            if (neuroDemo.renderer && neuroDemo.camera) {
+                const canvas = document.getElementById('game-canvas');
+                neuroDemo.camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+                neuroDemo.camera.updateProjectionMatrix();
+                neuroDemo.renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
             }
         });
     </script>
