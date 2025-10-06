@@ -2,7 +2,7 @@
 
 An open-source WebGL experience that turns cognitive training into an epic battle for your brain. Clear Tau Tanglers, strengthen synaptic connections, and boost your BDNF levels in this scientifically-inspired 3D environment.
 
-![Synaptic Wars Demo](https://menslanista.github.io/synaptic-wars-webgl-demo/)
+Play the Demo: https://menslanista.github.io/synaptic-wars-webgl-demo/
 
 ## ✨ Features
 
@@ -10,7 +10,7 @@ An open-source WebGL experience that turns cognitive training into an epic battl
 • ⚡ **Live Neuroplasticity Metrics** - Real-time BDNF & Synaptic Strength tracking
 • 🔗 **EEG Integration Ready** - Compatible with Muse headset for biofeedback
 • 🧠 **Scientifically-Inspired Gameplay** - Based on neuroplasticity research
-• ♿ **Built-in Accessibility** - Colorblind mode, motion reduction, high contrast
+• ♿ Built-in Accessibility - Colorblind mode, motion reduction, high contrast
 • ⚡ **Dendritic Lightning Abilities** - Clear Tau Tanglers with neural attacks
 • 📊 **Performance Optimized** - Object pooling, efficient rendering
 
@@ -18,7 +18,7 @@ An open-source WebGL experience that turns cognitive training into an epic battl
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/synaptic-wars-webgl.git
+git clone https://github.com/menslanista/synaptic-wars-webgl.git
 
 # Navigate to project directory
 cd synaptic-wars-webgl
